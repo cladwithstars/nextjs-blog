@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-on-netlify"
   },
   "dependencies": {
     "@sanity/block-content-to-react": "^3.0.0",
@@ -14,6 +15,7 @@
     "@sanity/image-url": "^1.0.1",
     "groq": "^2.29.3",
     "next": "^12.1.5",
+    "next-on-netlify": "^3.0.1",
     "react": "18.0.0",
     "react-dom": "18.0.0"
   },
