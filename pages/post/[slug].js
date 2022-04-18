@@ -1,9 +1,15 @@
-import client from "./client";
+import sanityClient from "@sanity/client";
 import styles from "../../styles/Post.module.css";
 import { useState, useEffect } from "react";
 import { ImageUrlBuilder } from "@sanity/image-url";
 import SanityBlockContent from "@sanity/block-content-to-react";
 import { Toolbar } from "../../components/toolbar";
+
+export const client = sanityClient({
+  projectId: "f6z2kolu", // you can find this in sanity.json
+  dataset: "production", // or the name you chose in step 1
+  useCdn: true, // `false` if you want to ensure fresh data
+});
 
 export const Post = ({ post }) => {
   //   console.log(title, body, image);
@@ -20,9 +26,9 @@ export const Post = ({ post }) => {
     <div>
       <Toolbar />
       <div className={styles.main}>
-        <h1>{post.title}</h1>
+        <h1>{post?.title}</h1>
         {/* {imageUrl && <img className={styles.mainImage} src={imageUrl} />} */}
-        <div>{<SanityBlockContent blocks={post.body} />}</div>
+        <div>{<SanityBlockContent blocks={post?.body} />}</div>
       </div>
     </div>
   );

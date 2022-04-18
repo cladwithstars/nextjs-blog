@@ -2,10 +2,16 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { Toolbar } from "../components/toolbar";
-import client from "./post/client";
 import groq from "groq";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import sanityClient from "@sanity/client";
+
+const client = sanityClient({
+  projectId: "f6z2kolu", // you can find this in sanity.json
+  dataset: "production", // or the name you chose in step 1
+  useCdn: true, // `false` if you want to ensure fresh data
+});
 
 export default function Home({ posts }) {
   const router = useRouter();
