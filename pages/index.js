@@ -10,7 +10,9 @@ import sanityClient from "@sanity/client";
 const client = sanityClient({
   projectId: "f6z2kolu", // you can find this in sanity.json
   dataset: "production", // or the name you chose in step 1
-  useCdn: true, // `false` if you want to ensure fresh data
+  token:
+    "skOmYDEpSgSXyRP4E4fOTxkUq4RMbezGLQniJUFMxJ11SMpbWZ733cUeNlW8qFq3DW2Jc2SHOP2GeMBuh0pQCTNxRk4uP1e1PsMn1WITjDhIBJXAldDridXXpH3sdGrKLb5Zw3mYooJ0tc921o8hwxvBrzxSayZfd3JN8C9O1co03PKO5V69",
+  useCdn: false, // `false` if you want to ensure fresh data
 });
 
 export default function Home({ posts }) {
