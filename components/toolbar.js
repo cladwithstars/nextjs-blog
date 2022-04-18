@@ -12,11 +12,7 @@ export const Toolbar = () => {
       >
         Twitter
       </div>
-      <div
-        onClick={() => (window.location.href = "https://github.com/portexe")}
-      >
-        GitHub
-      </div> */}
+       */}
     </div>
   );
 };
