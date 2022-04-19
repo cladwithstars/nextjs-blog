@@ -1,7 +1,7 @@
 import sanityClient from "@sanity/client";
 import styles from "../../styles/Post.module.css";
 import { useState, useEffect } from "react";
-import { ImageUrlBuilder } from "@sanity/image-url";
+import imageUrlBuilder from "@sanity/image-url";
 import SanityBlockContent from "@sanity/block-content-to-react";
 import { Toolbar } from "../../components/toolbar";
 
@@ -13,23 +13,24 @@ export const client = sanityClient({
   useCdn: false, // `false` if you want to ensure fresh data
 });
 
+function urlFor(source) {
+  return imageUrlBuilder(client).image(source);
+}
 export const Post = ({ post }) => {
-  //   console.log(title, body, image);
   const [imageUrl, setImageUrl] = useState("");
-  //   useEffect(() => {
-  //     const imgBuilder = ImageUrlBuilder({
-  //       projectId: "f6z2kolu",
-  //       dataset: "production",
-  //     });
-  //     setImageUrl(imgBuilder.image(image));
-  //   }, [post.image]);
+  useEffect(() => {
+    const srcString = urlFor(post.mainImage);
+
+    setImageUrl(srcString);
+  }, [post.mainImage]);
 
   return (
     <div>
       <Toolbar />
       <div className={styles.main}>
         <h1>{post?.title}</h1>
-        {/* {imageUrl && <img className={styles.mainImage} src={imageUrl} />} */}
+        {imageUrl && <img className={styles.mainImage} src={imageUrl} />}
+
         <div>{<SanityBlockContent blocks={post?.body} />}</div>
       </div>
     </div>

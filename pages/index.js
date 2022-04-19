@@ -6,6 +6,7 @@ import groq from "groq";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import sanityClient from "@sanity/client";
+import styled from "styled-components";
 
 const client = sanityClient({
   projectId: "f6z2kolu", // you can find this in sanity.json
@@ -43,7 +44,7 @@ export default function Home({ posts }) {
     <div>
       <Toolbar />
       <div className={styles.main}>
-        <h3>Recent Posts:</h3>
+        <h3>Posts</h3>
 
         <div className={styles.feed}>
           {mappedPosts.length ? (
@@ -53,7 +54,9 @@ export default function Home({ posts }) {
                 key={index}
                 className={styles.post}
               >
-                <h3 style={{ cursor: "pointer" }}>{p.title}</h3>
+                <StyledHeader style={{ cursor: "pointer" }}>
+                  {p.title}
+                </StyledHeader>
                 {/* <img className={styles.mainImage} src={p.mainImage} /> */}
               </div>
             ))
@@ -65,6 +68,11 @@ export default function Home({ posts }) {
     </div>
   );
 }
+const StyledHeader = styled.h3`
+  :hover {
+    text-decoration: underline;
+  }
+`;
 
 export async function getStaticProps() {
   const posts = await client.fetch(groq`
