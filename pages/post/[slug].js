@@ -19,12 +19,12 @@ function urlFor(source) {
 export const Post = ({ post }) => {
   const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
-    if (post.mainImage) {
+    if (post?.mainImage) {
       const srcString = urlFor(post.mainImage);
 
       setImageUrl(srcString);
     }
-  }, [post.mainImage]);
+  }, [post]);
 
   return (
     <div>
