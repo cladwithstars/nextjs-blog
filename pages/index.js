@@ -5,16 +5,9 @@ import { Toolbar } from "../components/toolbar";
 import groq from "groq";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import sanityClient from "@sanity/client";
 import styled from "styled-components";
-
-const client = sanityClient({
-  projectId: "f6z2kolu", // you can find this in sanity.json
-  dataset: "production", // or the name you chose in step 1
-  token:
-    "skOmYDEpSgSXyRP4E4fOTxkUq4RMbezGLQniJUFMxJ11SMpbWZ733cUeNlW8qFq3DW2Jc2SHOP2GeMBuh0pQCTNxRk4uP1e1PsMn1WITjDhIBJXAldDridXXpH3sdGrKLb5Zw3mYooJ0tc921o8hwxvBrzxSayZfd3JN8C9O1co03PKO5V69",
-  useCdn: false, // `false` if you want to ensure fresh data
-});
+import client from "../lib/client";
+import { Grid, Card, Button, Container } from "react-bootstrap";
 
 export default function Home({ posts }) {
   const router = useRouter();
@@ -22,16 +15,11 @@ export default function Home({ posts }) {
 
   useEffect(() => {
     if (posts.length) {
-      // const imgBuilder = imageUrlBuilder({
-      //   projectId: "mjoyrhci",
-      //   dataset: "production",
-      // });
-
       setMappedPosts(
         posts.map((p) => {
           return {
             ...p,
-            // mainImage: imgBuilder.image(p.mainImage).width(500).height(250),
+            category: p.categories ? p.categories[0] : "",
           };
         })
       );
@@ -44,40 +32,52 @@ export default function Home({ posts }) {
     <div>
       <Toolbar />
       <div className={styles.main}>
-        <h3>Posts</h3>
-
         <div className={styles.feed}>
-          {mappedPosts.length ? (
-            mappedPosts.map((p, index) => (
-              <div
-                onClick={() => router.push(`/post/${p.slug.current}`)}
-                key={index}
-                className={styles.post}
-              >
-                <StyledHeader style={{ cursor: "pointer" }}>
-                  {p.title}
-                </StyledHeader>
-                {/* <img className={styles.mainImage} src={p.mainImage} /> */}
-              </div>
-            ))
-          ) : (
-            <>No Posts Yet</>
-          )}
+          <Container
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+            }}
+          >
+            {mappedPosts.length ? (
+              mappedPosts.map((p, index) => (
+                <Card style={{ width: "18rem", margin: "1rem" }} key={index}>
+                  <Card.Body>
+                    <Card.Title>{p.title}</Card.Title>
+                    <Card.Text>{p.category || ""}</Card.Text>
+                    <Button
+                      onClick={() => router.push(`/post/${p.slug.current}`)}
+                      variant="primary"
+                    >
+                      See post
+                    </Button>
+                  </Card.Body>
+                </Card>
+              ))
+            ) : (
+              <>No Posts Yet</>
+            )}
+          </Container>
         </div>
       </div>
     </div>
   );
 }
 const StyledHeader = styled.h3`
+  cursor: pointer;
   :hover {
     text-decoration: underline;
   }
 `;
 
+const query = groq`*[_type == "post" && publishedAt < now()]{
+  title,
+  slug,
+  "categories": categories[]->title
+} | order(publishedAt desc)`;
+
 export async function getStaticProps() {
-  const posts = await client.fetch(groq`
-    *[_type == "post" && publishedAt < now()] | order(publishedAt desc)
-  `);
+  const posts = await client.fetch(query);
   return {
     props: {
       posts,

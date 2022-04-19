@@ -9,7 +9,12 @@ export const Toolbar = () => {
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand onClick={() => router.push("/")}>Algo Blog</Navbar.Brand>
+        <Navbar.Brand
+          style={{ cursor: "pointer" }}
+          onClick={() => router.push("/")}
+        >
+          Algo Blog
+        </Navbar.Brand>
         <Nav className="me-auto">
           <Nav.Link onClick={() => router.push("/")}>Home</Nav.Link>
         </Nav>

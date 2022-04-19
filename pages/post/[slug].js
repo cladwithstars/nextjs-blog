@@ -4,14 +4,9 @@ import { useState, useEffect } from "react";
 import imageUrlBuilder from "@sanity/image-url";
 import SanityBlockContent from "@sanity/block-content-to-react";
 import { Toolbar } from "../../components/toolbar";
-
-export const client = sanityClient({
-  projectId: "f6z2kolu", // you can find this in sanity.json
-  dataset: "production", // or the name you chose in step 1
-  token:
-    "skOmYDEpSgSXyRP4E4fOTxkUq4RMbezGLQniJUFMxJ11SMpbWZ733cUeNlW8qFq3DW2Jc2SHOP2GeMBuh0pQCTNxRk4uP1e1PsMn1WITjDhIBJXAldDridXXpH3sdGrKLb5Zw3mYooJ0tc921o8hwxvBrzxSayZfd3JN8C9O1co03PKO5V69",
-  useCdn: false, // `false` if you want to ensure fresh data
-});
+import client from "../../lib/client";
+import { Card } from "react-bootstrap";
+import groq from "groq";
 
 function urlFor(source) {
   return imageUrlBuilder(client).image(source);
@@ -27,13 +22,14 @@ export const Post = ({ post }) => {
   }, [post]);
 
   return (
-    <div>
+    <div className="mb-2">
       <Toolbar />
       <div className={styles.main}>
         <h1>{post?.title}</h1>
-        {imageUrl && <img className={styles.mainImage} src={imageUrl} />}
 
         <div>{<SanityBlockContent blocks={post?.body} />}</div>
+        <h4>My implementation:</h4>
+        {imageUrl && <img className={styles.mainImage} src={imageUrl} />}
       </div>
     </div>
   );
@@ -50,15 +46,18 @@ export async function getStaticPaths() {
   };
 }
 
+const query = groq`*[_type == "post" && slug.current == $slug][0]{
+  title,
+  body,
+  mainImage,
+  "categories": categories[]->title
+}`;
+
 export async function getStaticProps(context) {
   // It's important to default the slug so that it doesn't return "undefined"
+
   const { slug = "" } = context.params;
-  const post = await client.fetch(
-    `
-      *[_type == "post" && slug.current == $slug][0]
-    `,
-    { slug }
-  );
+  const post = await client.fetch(query, { slug });
   return {
     props: {
       post,
