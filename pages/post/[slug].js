@@ -6,12 +6,27 @@ import SanityBlockContent from "@sanity/block-content-to-react";
 import { Toolbar } from "../../components/toolbar";
 import client from "../../lib/client";
 import { Card } from "react-bootstrap";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import groq from "groq";
 // import Image from "next/image";
+// import { style } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 function urlFor(source) {
   return imageUrlBuilder(client).image(source);
 }
+const serializers = {
+  types: {
+    code: (props) => (
+      <SyntaxHighlighter
+        useInlineStyles={false}
+        language={props.node.language}
+        // style={docco}
+      >
+        {props.node.code}
+      </SyntaxHighlighter>
+    ),
+  },
+};
 export const Post = ({ post }) => {
   const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
@@ -28,8 +43,10 @@ export const Post = ({ post }) => {
       <div className={styles.main}>
         <h1>{post?.title}</h1>
 
-        <div>{<SanityBlockContent blocks={post?.body} />}</div>
-        <h4>My implementation:</h4>
+        <div>
+          {<SanityBlockContent serializers={serializers} blocks={post?.body} />}
+        </div>
+
         {imageUrl && (
           <img className={styles.mainImage} src={imageUrl} alt="img alt" />
         )}

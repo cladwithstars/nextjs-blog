@@ -7,7 +7,7 @@ export const Toolbar = () => {
   const router = useRouter();
 
   return (
-    <Navbar bg="dark" variant="dark">
+    <Navbar bg="light" variant="light">
       <Container>
         <Navbar.Brand
           style={{ cursor: "pointer" }}
