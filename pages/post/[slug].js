@@ -7,6 +7,7 @@ import { Toolbar } from "../../components/toolbar";
 import client from "../../lib/client";
 import { Card } from "react-bootstrap";
 import groq from "groq";
+import Image from "next/image";
 
 function urlFor(source) {
   return imageUrlBuilder(client).image(source);
@@ -29,7 +30,9 @@ export const Post = ({ post }) => {
 
         <div>{<SanityBlockContent blocks={post?.body} />}</div>
         <h4>My implementation:</h4>
-        {imageUrl && <img className={styles.mainImage} src={imageUrl} />}
+        {imageUrl && (
+          <Image className={styles.mainImage} src={imageUrl} alt="img" />
+        )}
       </div>
     </div>
   );
