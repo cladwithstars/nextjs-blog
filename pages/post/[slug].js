@@ -1,15 +1,21 @@
 import sanityClient from "@sanity/client";
 import styles from "../../styles/Post.module.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import imageUrlBuilder from "@sanity/image-url";
 import SanityBlockContent from "@sanity/block-content-to-react";
 import { Toolbar } from "../../components/toolbar";
 import client from "../../lib/client";
 import { Card } from "react-bootstrap";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+// import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import SyntaxHighlighter from "react-syntax-highlighter";
 import groq from "groq";
-// import Image from "next/image";
-// import { style } from "react-syntax-highlighter/dist/esm/styles/prism";
+
+import {
+  dark,
+  dracula,
+  docco,
+  monokai,
+} from "react-syntax-highlighter/dist/cjs/styles/hljs";
 
 function urlFor(source) {
   return imageUrlBuilder(client).image(source);
@@ -17,25 +23,27 @@ function urlFor(source) {
 const serializers = {
   types: {
     code: (props) => (
+      // <div style={{ backgroundColor: "black" }}>
       <SyntaxHighlighter
         useInlineStyles={false}
+        showLineNumbers
         language={props.node.language}
-        // style={docco}
+        style={monokai}
       >
         {props.node.code}
       </SyntaxHighlighter>
+      // </div>
     ),
   },
 };
 export const Post = ({ post }) => {
-  const [imageUrl, setImageUrl] = useState("");
-  useEffect(() => {
-    if (post?.mainImage) {
-      const srcString = urlFor(post.mainImage);
-
-      setImageUrl(srcString);
-    }
-  }, [post]);
+  // const [imageUrl, setImageUrl] = useState("");
+  // useEffect(() => {
+  //   if (post?.mainImage) {
+  //     const srcString = urlFor(post.mainImage);
+  //     setImageUrl(srcString);
+  //   }
+  // }, [post]);
 
   return (
     <div className="mb-2">
@@ -47,9 +55,9 @@ export const Post = ({ post }) => {
           {<SanityBlockContent serializers={serializers} blocks={post?.body} />}
         </div>
 
-        {imageUrl && (
+        {/* {imageUrl && (
           <img className={styles.mainImage} src={imageUrl} alt="img alt" />
-        )}
+        )} */}
       </div>
     </div>
   );
