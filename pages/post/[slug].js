@@ -41,7 +41,7 @@ export const Post = ({ post }) => {
     <div className="mb-2">
       <Toolbar />
       <div className={styles.main}>
-        <h1>{post?.title}</h1>
+        <h1 className="mb-4">{post?.title}</h1>
 
         <div>
           {<SanityBlockContent serializers={serializers} blocks={post?.body} />}

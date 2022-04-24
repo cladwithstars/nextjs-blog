@@ -43,11 +43,11 @@ export default function Home({ posts }) {
               mappedPosts.map((p, index) => (
                 <Card style={{ width: "18rem", margin: "1rem" }} key={index}>
                   <Card.Body>
-                    <Card.Title>{p.title}</Card.Title>
+                    <Card.Title className="fw-bold">{p.title}</Card.Title>
                     <Card.Text>{p.category || ""}</Card.Text>
                     <Button
                       onClick={() => router.push(`/post/${p.slug.current}`)}
-                      variant="primary"
+                      variant="outline-primary"
                     >
                       See post
                     </Button>
@@ -69,6 +69,9 @@ const StyledHeader = styled.h3`
     text-decoration: underline;
   }
 `;
+const StyledButton = styled(Button)`
+  c
+  `;
 
 const query = groq`*[_type == "post" && publishedAt < now()]{
   title,
