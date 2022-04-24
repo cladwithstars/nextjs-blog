@@ -31,7 +31,7 @@ export const Post = ({ post }) => {
         <div>{<SanityBlockContent blocks={post?.body} />}</div>
         <h4>My implementation:</h4>
         {imageUrl && (
-          <img className={styles.mainImage} src={imageUrl} alt="img" />
+          <img className={styles.mainImage} src={imageUrl} alt="img alt" />
         )}
       </div>
     </div>
